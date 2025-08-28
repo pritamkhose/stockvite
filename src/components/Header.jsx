@@ -2,34 +2,102 @@ import {
   HomeTwoTone,
   EditTwoTone,
   CheckCircleTwoTone,
+  MailOutlined,
+  AppstoreOutlined,
+  SettingOutlined,
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import { useState } from "react";
-import { Outlet, Link } from "react-router-dom";
+import { Outlet } from "react-router-dom";
+import Footer from "./Footer";
+
+const items = [
+  {
+    label: <a href="/">Home</a>,
+    key: "home",
+    icon: <HomeTwoTone />,
+  },
+  {
+    label: <a href="/about">About</a>,
+    key: "about",
+    icon: <CheckCircleTwoTone />,
+  },
+  {
+    label: "Navigation Three - Submenu",
+    key: "SubMenu",
+    icon: <SettingOutlined />,
+    disabled: true,
+    children: [
+      {
+        type: "group",
+        label: "Item 1",
+        children: [
+          {
+            label: "Option 1",
+            key: "setting:1",
+          },
+          {
+            label: "Option 2",
+            key: "setting:2",
+          },
+        ],
+      },
+      {
+        type: "group",
+        label: "Item 2",
+        children: [
+          {
+            label: "Option 3",
+            key: "setting:3",
+          },
+          {
+            label: (
+              <a
+                href="https://ant.design"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Navigation Four - Link
+              </a>
+            ),
+            key: "setting:4",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    label: <a href="/login">Login</a>,
+    key: "login",
+    icon: <MailOutlined />,
+  },
+  {
+    label: <a href="/register">Register</a>,
+    key: "register",
+    icon: <AppstoreOutlined />,
+  },
+];
 
 const Header = () => {
-  const [current, setCurrent] = useState("h");
+  const [current, setCurrent] = useState("home");
+  const minHeight = window.innerHeight;
+
   const onClick = (e) => {
-    console.log("click ", e);
+    // console.log("click ", e);
     setCurrent(e.key);
   };
   return (
     <>
-      <Menu onClick={onClick} selectedKeys={[current]} mode="horizontal">
-        <Menu.Item key="home" icon={<HomeTwoTone />}>
-          <Link to="/">Home</Link>
-        </Menu.Item>
-         <Menu.Item key="about" icon={<EditTwoTone />}>
-          <Link to="/about">About</Link>
-        </Menu.Item>
-        <Menu.Item key="register" icon={<EditTwoTone />}>
-          <Link to="/register">Register</Link>
-        </Menu.Item>
-        <Menu.Item key="login" icon={<CheckCircleTwoTone />}>
-          <Link to="/login">Login</Link>
-        </Menu.Item>
-      </Menu>
-      <Outlet />
+      <Menu
+        onClick={onClick}
+        selectedKeys={[current]}
+        mode="horizontal"
+        items={items}
+      />
+      <div style={{ minHeight: minHeight - minHeight * 0.14 + "px" }}>
+        <Outlet />
+      </div>
+      <Footer />
     </>
   );
 };

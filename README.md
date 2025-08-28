@@ -29,4 +29,5 @@ Open [http://localhost:5173](http://localhost:5173) to view it in the browser.
 
 # Reference
 - [New Project setup](https://medium.com/@galohernandez/vite-react-react-router-dom-the-latest-way-312ee887197e) Vite-React + React-Router-Dom
-
+- [React Docs - Component](https://react.dev/reference/react/Component)
+- [ErrorBoundary with react](https://stackoverflow.com/questions/60537645/how-to-implement-error-boundary-with-react-hooks-component)

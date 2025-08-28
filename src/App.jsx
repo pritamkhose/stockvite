@@ -1,4 +1,3 @@
-import React from "react";
 import "./App.css";
 import {
   Route,
@@ -7,6 +6,8 @@ import {
   RouterProvider,
 } from "react-router-dom";
 
+import { ErrorBoundary } from "react-error-boundary";
+import NotFound from "./components/NotFound";
 import Header from "./components/Header";
 import HomePage from "./pages/HomePage";
 import AboutPage from "./pages/AboutPage";
@@ -20,6 +21,7 @@ const router = createBrowserRouter(
       <Route path="about" element={<AboutPage />} />
       <Route path="login" element={<Login />} />
       <Route path="register" element={<Register />} />
+      <Route path="*" element={<NotFound />} />
     </Route>
   )
 );
@@ -27,17 +29,14 @@ const router = createBrowserRouter(
 const App = () => {
   return (
     <>
-      <RouterProvider router={router} />
-      {/* <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Header />}>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/about" element={<AboutPage />} />
-            <Route path="login" element={<Login />} />
-            <Route path="register" element={<Register />} />
-          </Route>
-        </Routes>
-      </BrowserRouter> */}
+      <ErrorBoundary
+        FallbackComponent={NotFound}
+        onReset={() => {
+          console.error("resetting the error boundary state");
+        }}
+      >
+        <RouterProvider router={router} />
+      </ErrorBoundary>
     </>
   );
 };
