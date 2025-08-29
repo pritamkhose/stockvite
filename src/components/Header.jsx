@@ -1,10 +1,14 @@
 import {
   AppstoreOutlined,
   CalculatorOutlined,
+  CheckCircleTwoTone,
+  DatabaseOutlined,
   FileSearchOutlined,
+  FundViewOutlined,
   HomeTwoTone,
   LinkOutlined,
   MailOutlined,
+  SettingOutlined,
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import { useState } from "react";
@@ -24,90 +28,103 @@ const Header = () => {
       : null,
   });
   const items = [
-  {
-    label: <a href="/">Home</a>,
-    key: "home",
-    icon: <HomeTwoTone />,
-  },
-  // {
-  //   label: <a href="/about">About</a>,
-  //   key: "about",
-  //   icon: <CheckCircleTwoTone />,
-  // },
-  {
-    label: <a href="/calc">Calculator</a>,
-    key: "calc",
-    icon: <CalculatorOutlined />,
-  },
-  {
-    label: <a href="/links">Links</a>,
-    key: "links",
-    icon: <LinkOutlined />,
-  },
-  // {
-  //   label: "Navigation Three - Submenu",
-  //   key: "SubMenu",
-  //   icon: <SettingOutlined />,
-  //   disabled: true,
-  //   children: [
-  //     {
-  //       type: "group",
-  //       label: "Item 1",
-  //       children: [
-  //         {
-  //           label: "Option 1",
-  //           key: "setting:1",
-  //         },
-  //         {
-  //           label: "Option 2",
-  //           key: "setting:2",
-  //         },
-  //       ],
-  //     },
-  //     {
-  //       type: "group",
-  //       label: "Item 2",
-  //       children: [
-  //         {
-  //           label: "Option 3",
-  //           key: "setting:3",
-  //         },
-  //         {
-  //           label: (
-  //             <a
-  //               href="https://ant.design"
-  //               target="_blank"
-  //               rel="noopener noreferrer"
-  //             >
-  //               Navigation Four - Link
-  //             </a>
-  //           ),
-  //           key: "setting:4",
-  //         },
-  //       ],
-  //     },
-  //   ],
-  // },
-  
-   {
-    label: <a href="/level">Stock level</a>,
-    key: "level",
-    icon: <FileSearchOutlined />,
-    hidden: !session.isLogin,
-  },
-  {
-    label: <a href="/login">Login</a>,
-    key: "login",
-    icon: <MailOutlined />,
-    hidden: session.isLogin,
-  },
-   {
-    label: <a href="/profile">Profile</a>,
-    key: "profile",
-    icon: <AppstoreOutlined />,
-    hidden: !session.isLogin,
-  },
-];
+    {
+      label: <a href="/">Home</a>,
+      key: "home",
+      icon: <HomeTwoTone />,
+    },
+    {
+      label: <a href="/about">About</a>,
+      key: "about",
+      icon: <CheckCircleTwoTone />,
+      hidden: true,
+    },
+    {
+      label: <a href="/calc">Calculator</a>,
+      key: "calc",
+      icon: <CalculatorOutlined />,
+    },
+    {
+      label: <a href="/links">Links</a>,
+      key: "links",
+      icon: <LinkOutlined />,
+    },
+    {
+      label: <a href="/portfolio">Portfolio</a>,
+      key: "portfolio",
+      icon: <DatabaseOutlined />,
+      hidden: !session.isLogin,
+    },
+    {
+      label: <a href="/watchlist">Watchlist</a>,
+      key: "watchlist",
+      icon: <FileSearchOutlined />,
+      hidden: !session.isLogin,
+    },
+    {
+      hidden: true,
+      label: "Navigation Three - Submenu",
+      key: "SubMenu",
+      icon: <SettingOutlined />,
+      disabled: true,
+      children: [
+        {
+          type: "group",
+          label: "Item 1",
+          children: [
+            {
+              label: "Option 1",
+              key: "setting:1",
+            },
+            {
+              label: "Option 2",
+              key: "setting:2",
+            },
+          ],
+        },
+        {
+          type: "group",
+          label: "Item 2",
+          children: [
+            {
+              label: "Option 3",
+              key: "setting:3",
+            },
+            {
+              label: (
+                <a
+                  href="https://ant.design"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Navigation Four - Link
+                </a>
+              ),
+              key: "setting:4",
+            },
+          ],
+        },
+      ],
+    },
+    {
+      label: <a href="/level">Stock level</a>,
+      key: "level",
+      icon: <FundViewOutlined />,
+      hidden: !session.isLogin,
+    },
+    {
+      label: <a href="/login">Login</a>,
+      key: "login",
+      icon: <MailOutlined />,
+      hidden: session.isLogin,
+    },
+    {
+      label: <a href="/profile">Profile</a>,
+      key: "profile",
+      icon: <AppstoreOutlined />,
+      hidden: !session.isLogin,
+    },
+  ];
 
   const onClick = (e) => {
     // console.log("click ", e);

@@ -244,8 +244,9 @@ const Login = () => {
             <td>User ID</td>
             <td>{localStorage.getItem("uid")}</td>
           </tr>
-          <tr>
-            <br/>
+           <tr>
+            <td>Device</td>
+            <td>{window.navigator.userAgent}</td>
           </tr>
           <tr>
             <td>
