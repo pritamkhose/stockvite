@@ -1,7 +1,7 @@
 import {
   AppstoreOutlined,
   CalculatorOutlined,
-  CheckCircleTwoTone,
+  FileSearchOutlined,
   HomeTwoTone,
   LinkOutlined,
   MailOutlined,
@@ -11,7 +11,19 @@ import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import Footer from "./Footer";
 
-const items = [
+const Header = () => {
+  const [current, setCurrent] = useState("home");
+  const minHeight = window.innerHeight;
+  // const [navExpanded, setNavExpanded] = useState(false);
+  // const [show, setShow] = useState(false);
+  const [session] = useState({
+    isLogin: localStorage.getItem("name") ? true : false,
+    user: localStorage.getItem("name") ? localStorage.getItem("name") : null,
+    imageUrl: localStorage.getItem("imageUrl")
+      ? localStorage.getItem("imageUrl")
+      : null,
+  });
+  const items = [
   {
     label: <a href="/">Home</a>,
     key: "home",
@@ -22,12 +34,12 @@ const items = [
   //   key: "about",
   //   icon: <CheckCircleTwoTone />,
   // },
-   {
+  {
     label: <a href="/calc">Calculator</a>,
     key: "calc",
     icon: <CalculatorOutlined />,
   },
-   {
+  {
     label: <a href="/links">Links</a>,
     key: "links",
     icon: <LinkOutlined />,
@@ -76,21 +88,26 @@ const items = [
   //     },
   //   ],
   // },
+  
+   {
+    label: <a href="/level">Stock level</a>,
+    key: "level",
+    icon: <FileSearchOutlined />,
+    hidden: !session.isLogin,
+  },
   {
     label: <a href="/login">Login</a>,
     key: "login",
     icon: <MailOutlined />,
+    hidden: session.isLogin,
   },
-  {
-    label: <a href="/register">Register</a>,
-    key: "register",
+   {
+    label: <a href="/profile">Profile</a>,
+    key: "profile",
     icon: <AppstoreOutlined />,
+    hidden: !session.isLogin,
   },
 ];
-
-const Header = () => {
-  const [current, setCurrent] = useState("home");
-  const minHeight = window.innerHeight;
 
   const onClick = (e) => {
     // console.log("click ", e);

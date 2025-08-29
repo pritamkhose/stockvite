@@ -13,8 +13,8 @@ import HomePage from "./pages/HomePage";
 import AboutPage from "./pages/AboutPage";
 import Calculators from "./pages/Calculators/Calculators";
 import StockLinks from "./pages/StockLinks";
+import StockLevel from "./pages/StockLevel";
 import Login from "./pages/Login";
-import Register from "./pages/Register";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -22,9 +22,10 @@ const router = createBrowserRouter(
       <Route index element={<HomePage />} />
       <Route path="about" element={<AboutPage />} />
       <Route path="login" element={<Login />} />
-      <Route path="register" element={<Register />} />
+      <Route path="profile" element={<Login />} />
       <Route path="calc" element={<Calculators />} />
       <Route path="links" element={<StockLinks />} />
+      <Route path="level" element={<StockLevel />} />
       <Route path="*" element={<NotFound />} />
     </Route>
   )
