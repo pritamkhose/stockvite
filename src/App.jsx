@@ -11,6 +11,8 @@ import NotFound from "./components/NotFound";
 import Header from "./components/Header";
 import HomePage from "./pages/HomePage";
 import AboutPage from "./pages/AboutPage";
+import Calculators from "./pages/Calculators/Calculators";
+import StockLinks from "./pages/StockLinks";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 
@@ -21,6 +23,8 @@ const router = createBrowserRouter(
       <Route path="about" element={<AboutPage />} />
       <Route path="login" element={<Login />} />
       <Route path="register" element={<Register />} />
+      <Route path="calc" element={<Calculators />} />
+      <Route path="links" element={<StockLinks />} />
       <Route path="*" element={<NotFound />} />
     </Route>
   )

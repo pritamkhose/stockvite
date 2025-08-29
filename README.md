@@ -27,7 +27,82 @@ Runs the app in the development mode.
 Open [http://localhost:5173](http://localhost:5173) to view it in the browser.
 
 
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Set env config variable
+
+| name                           | Description                | e.g.                   |
+| ------------------------------ | -------------------------- | ---------------------- |
+| ENV                            | Run react enviorment-mode  | development            |
+| VITE_APP_API_URL              | backed server url          | http://localhost:5000/ |
+| VITE_GITHUB_CLIENT_ID     | ID for for web             |                        |
+| VITE_FACEBOOK_CLIENT_ID   | ID for web login           |                        |
+| VITE_GOOGLE_CLIENT_ID     | SECRET for web             |                        |
+| VITE_GOOGLE_CLIENT_SECRET | SECRET for for web captcha |                        |
+| VITE_AUTH_LOGIN           | enable auth type           |                        |
+
+
+```sh
+TZ: Asia/Calcutta
+VITE_APP_API_URL: https://market-dashboard-7arb.onrender.com/
+VITE_FACEBOOK_CLIENT_ID: <SECRET_ID>
+VITE_GITHUB_CLIENT_ID: <SECRET_ID>
+VITE_GOOGLE_CLIENT_ID: <SECRET_ID>
+VITE_AUTH_LOGIN: { "github": true, "google": false, "facebook": false, "email": true }
+```
+
 # Reference
 - [New Project setup](https://medium.com/@galohernandez/vite-react-react-router-dom-the-latest-way-312ee887197e) Vite-React + React-Router-Dom
+
 - [React Docs - Component](https://react.dev/reference/react/Component)
+
 - [ErrorBoundary with react](https://stackoverflow.com/questions/60537645/how-to-implement-error-boundary-with-react-hooks-component)
+
+- [React doc](https://react.dev/)
+
+- [Render Web Services](https://render.com/docs/web-services)
+
+- [vitejs docs](https://v3.vitejs.dev/guide/)
+
+- [Reactrouter docs](https://reactrouter.com/start/framework/navigating)
+
+- [Examples auth-router-provider/](https://github.com/remix-run/react-router/blob/main/examples/auth-router-provider/)
+
+- [Ant design Icon](https://ant.design/components/icon)
+
+## React Charts Links
+
+- [LightWeight Charts time series](https://jsfiddle.net/hz07guto/)
+
+- [react-vis Charts](https://github.com/uber/react-vis/)
+
+- [React Google Charts](https://react-google-charts.com/)
+
+- [React MicroBar Charts](https://github.com/KyleAMathews/react-micro-bar-chart)
+
+## Login with Github
+
+- [Github developers](https://github.com/settings/developers)
+
+- [Login with Github](https://medium.com/zestgeek/login-with-github-and-microsoft-in-reactjs-e33ffbcd933)
+
+- [Github Authorizing OAuth Apps](https://docs.github.com/en/developers/apps/authorizing-oauth-appsl)
+
+## Extra
+
+- [w3schools Colors Picker](https://www.w3schools.com/colors/colors_picker.asp)
+
+- [React Email Validation](https://www.itsolutionstuff.com/post/react-email-validation-exampleexample.html)
+
+## react-hook-form-v7
+
+- [react-hook-form Doc](https://react-hook-form.com/api/useform)
+
+- [React Bootstrap from](https://react-bootstrap.netlify.app/forms/form-control/)
+
+- [react-hook-form-v7-controller Example](https://codesandbox.io/s/react-hook-form-v7-controller-5h1q5?file=/src/AntD.js:351-361)
+

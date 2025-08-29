@@ -1,10 +1,10 @@
 import {
-  HomeTwoTone,
-  EditTwoTone,
-  CheckCircleTwoTone,
-  MailOutlined,
   AppstoreOutlined,
-  SettingOutlined,
+  CalculatorOutlined,
+  CheckCircleTwoTone,
+  HomeTwoTone,
+  LinkOutlined,
+  MailOutlined,
 } from "@ant-design/icons";
 import { Menu } from "antd";
 import { useState } from "react";
@@ -17,55 +17,65 @@ const items = [
     key: "home",
     icon: <HomeTwoTone />,
   },
-  {
-    label: <a href="/about">About</a>,
-    key: "about",
-    icon: <CheckCircleTwoTone />,
+  // {
+  //   label: <a href="/about">About</a>,
+  //   key: "about",
+  //   icon: <CheckCircleTwoTone />,
+  // },
+   {
+    label: <a href="/calc">Calculator</a>,
+    key: "calc",
+    icon: <CalculatorOutlined />,
   },
-  {
-    label: "Navigation Three - Submenu",
-    key: "SubMenu",
-    icon: <SettingOutlined />,
-    disabled: true,
-    children: [
-      {
-        type: "group",
-        label: "Item 1",
-        children: [
-          {
-            label: "Option 1",
-            key: "setting:1",
-          },
-          {
-            label: "Option 2",
-            key: "setting:2",
-          },
-        ],
-      },
-      {
-        type: "group",
-        label: "Item 2",
-        children: [
-          {
-            label: "Option 3",
-            key: "setting:3",
-          },
-          {
-            label: (
-              <a
-                href="https://ant.design"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Navigation Four - Link
-              </a>
-            ),
-            key: "setting:4",
-          },
-        ],
-      },
-    ],
+   {
+    label: <a href="/links">Links</a>,
+    key: "links",
+    icon: <LinkOutlined />,
   },
+  // {
+  //   label: "Navigation Three - Submenu",
+  //   key: "SubMenu",
+  //   icon: <SettingOutlined />,
+  //   disabled: true,
+  //   children: [
+  //     {
+  //       type: "group",
+  //       label: "Item 1",
+  //       children: [
+  //         {
+  //           label: "Option 1",
+  //           key: "setting:1",
+  //         },
+  //         {
+  //           label: "Option 2",
+  //           key: "setting:2",
+  //         },
+  //       ],
+  //     },
+  //     {
+  //       type: "group",
+  //       label: "Item 2",
+  //       children: [
+  //         {
+  //           label: "Option 3",
+  //           key: "setting:3",
+  //         },
+  //         {
+  //           label: (
+  //             <a
+  //               href="https://ant.design"
+  //               target="_blank"
+  //               rel="noopener noreferrer"
+  //             >
+  //               Navigation Four - Link
+  //             </a>
+  //           ),
+  //           key: "setting:4",
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // },
   {
     label: <a href="/login">Login</a>,
     key: "login",
