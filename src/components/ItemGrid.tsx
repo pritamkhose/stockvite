@@ -1,13 +1,11 @@
-import { Link } from "react-router-dom";
 import { Card } from "react-bootstrap";
 import ItemHL from "./ItemHL";
-import { StockProps } from "./models";
+import { IndianIndicesProps } from "./models";
 
-const ItemGrid = (aObj: StockProps) => {
-  var color = aObj.change_val > 0 ? "limegreen" : "red";
-  var trend = aObj.trend === "+" ? "+" : null;
+const ItemGrid = (aObj: IndianIndicesProps) => {
+  var color = aObj.chg > 0 ? "limegreen" : "red";
   var backgroundGrad =
-    trend === null
+     aObj.chg > 0 === null
       ? "linear-gradient(to right, #fcd2c9, white)"
       : "linear-gradient(to right, #d7fcc9, white)";
   var smallfontSize = "0.8rem";
@@ -18,12 +16,11 @@ const ItemGrid = (aObj: StockProps) => {
           <tbody>
             <tr key="0">
               <td>
-                <Link
+                <p
                   style={{ color: "blue" }}
-                  to={`${"/details"}/${aObj.scrip_cd}`}
                 >
-                  {aObj.scripname}
-                </Link>
+                  {aObj.name}
+                </p>
               </td>
               <td
                 style={{
@@ -33,17 +30,17 @@ const ItemGrid = (aObj: StockProps) => {
                   fontSize: "0.9rem",
                 }}
               >
-                {aObj.ltradert}
+                {aObj.ltp}
               </td>
             </tr>
           </tbody>
         </table>
-        <ItemHL aObj={aObj} />
+        <ItemHL {...aObj} />
         <table>
           <tbody>
             <tr key="1">
               <td style={{ fontSize: smallfontSize, color: "orange" }}>
-                {aObj.lowrate}
+                {aObj.low}
               </td>
               <td
                 style={{
@@ -52,8 +49,7 @@ const ItemGrid = (aObj: StockProps) => {
                   textAlign: "center",
                 }}
               >
-                {trend}
-                {aObj.change_percent}%
+                {aObj.chgper}%
               </td>
               <td
                 style={{
@@ -62,7 +58,7 @@ const ItemGrid = (aObj: StockProps) => {
                   color: "teal",
                 }}
               >
-                {aObj.highrate}
+                {aObj.high}
               </td>
             </tr>
           </tbody>

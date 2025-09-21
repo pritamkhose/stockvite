@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { Container } from "react-bootstrap";
-import StockIndrex from "./StockIndex";
+import McHome from "./McHome";
+import McIndianIndices from "./McIndianIndices";
 
 const HomePage: React.FC = () => {
   const isLogined = localStorage.getItem("name") || "" ? true : false;
@@ -13,9 +14,16 @@ const HomePage: React.FC = () => {
 
   return (
     <div>
-      {isLogined && false ? <StockIndrex /> : <Container fluid className="center">
-        Home
-      </Container>}
+      {isLogined ? (
+        <>
+          <McIndianIndices />
+          <McHome />
+        </>
+      ) : (
+        <Container fluid className="center">
+          Home
+        </Container>
+      )}
     </div>
   );
 };
