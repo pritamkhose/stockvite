@@ -123,6 +123,7 @@ const Login = () => {
     });
     // props.updateLogin();
     // props.history.push('/');
+     window.dispatchEvent(new Event("storage"));
   };
 
   const handleLoginFailure = () => {
@@ -206,6 +207,7 @@ const Login = () => {
       ...state,
       isLogined: true,
     });
+    window.dispatchEvent(new Event("storage"));
   };
 
   const getProfile = () => {

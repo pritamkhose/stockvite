@@ -10,53 +10,94 @@ import {
   MailOutlined,
   SettingOutlined,
 } from "@ant-design/icons";
-import { Menu } from "antd";
-import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Nav, Navbar } from "react-bootstrap";
+import { Link, Outlet } from "react-router-dom";
+import logo from "../images/logo.svg";
 import Footer from "./Footer";
 
 const Header = () => {
-  const [current, setCurrent] = useState("home");
   const minHeight = window.innerHeight;
-  // const [navExpanded, setNavExpanded] = useState(false);
-  // const [show, setShow] = useState(false);
-  const [session] = useState({
+  const [navExpanded, setNavExpanded] = useState(false);
+  const setNavClose = () => setNavExpanded(false);
+  const [session, setSession] = useState({
     isLogin: localStorage.getItem("name") ? true : false,
     user: localStorage.getItem("name") ? localStorage.getItem("name") : null,
     imageUrl: localStorage.getItem("imageUrl")
       ? localStorage.getItem("imageUrl")
       : null,
   });
+
+  useEffect(() => {
+    const listenStorageChange = () => {
+      setSession({
+        isLogin: localStorage.getItem("name") ? true : false,
+        user: localStorage.getItem("name")
+          ? localStorage.getItem("name")
+          : null,
+        imageUrl: localStorage.getItem("imageUrl")
+          ? localStorage.getItem("imageUrl")
+          : null,
+      });
+    };
+    window.addEventListener("storage", listenStorageChange);
+    return () => window.removeEventListener("storage", listenStorageChange);
+  }, [session.user]);
+
   const items = [
     {
-      label: <a href="/">Home</a>,
+      label: (
+        <Link className="nav-link" to="/">
+          Home
+        </Link>
+      ),
       key: "home",
       icon: <HomeTwoTone />,
     },
     {
-      label: <a href="/about">About</a>,
+      label: (
+        <Link className="nav-link" to="/about">
+          About
+        </Link>
+      ),
       key: "about",
       icon: <CheckCircleTwoTone />,
       hidden: true,
     },
     {
-      label: <a href="/calc">Calculator</a>,
+      label: (
+        <Link className="nav-link" to="/calc">
+          Calculator
+        </Link>
+      ),
       key: "calc",
       icon: <CalculatorOutlined />,
     },
     {
-      label: <a href="/links">Links</a>,
+      label: (
+        <Link className="nav-link" to="/links">
+          Links
+        </Link>
+      ),
       key: "links",
       icon: <LinkOutlined />,
     },
     {
-      label: <a href="/portfolio">Portfolio</a>,
+      label: (
+        <Link className="nav-link" to="/portfolio">
+          Portfolio
+        </Link>
+      ),
       key: "portfolio",
       icon: <DatabaseOutlined />,
       hidden: !session.isLogin,
     },
     {
-      label: <a href="/watchlist">Watchlist</a>,
+      label: (
+        <Link className="nav-link" to="/watchlist">
+          Watchlist
+        </Link>
+      ),
       key: "watchlist",
       icon: <FileSearchOutlined />,
       hidden: !session.isLogin,
@@ -92,13 +133,13 @@ const Header = () => {
             },
             {
               label: (
-                <a
-                  href="https://ant.design"
+                <Link
+                  to="https://ant.design"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   Navigation Four - Link
-                </a>
+                </Link>
               ),
               key: "setting:4",
             },
@@ -107,38 +148,80 @@ const Header = () => {
       ],
     },
     {
-      label: <a href="/level">Stock level</a>,
+      label: (
+        <Link className="nav-link" to="/level">
+          Stock level
+        </Link>
+      ),
       key: "level",
       icon: <FundViewOutlined />,
       hidden: !session.isLogin,
     },
     {
-      label: <a href="/login">Login</a>,
+      label: (
+        <Link className="nav-link" to="/login">
+          Login
+        </Link>
+      ),
       key: "login",
       icon: <MailOutlined />,
       hidden: session.isLogin,
     },
     {
-      label: <a href="/profile">Profile</a>,
+      label: (
+        <Link className="nav-link" to="/profile">
+          Profile
+        </Link>
+      ),
       key: "profile",
       icon: <AppstoreOutlined />,
       hidden: !session.isLogin,
     },
   ];
 
-  const onClick = (e) => {
-    // console.log("click ", e);
-    setCurrent(e.key);
-  };
   return (
     <>
-      <Menu
-        onClick={onClick}
-        selectedKeys={[current]}
-        mode="horizontal"
-        items={items}
-      />
-      <div style={{ minHeight: minHeight - minHeight * 0.14 + "px" }}>
+      <Navbar
+        bg="light"
+        variant="light"
+        expand="lg"
+        fixed="top"
+        style={{ position: "sticky", top: 0, zIndex: 1 }}
+        onToggle={setNavExpanded}
+        expanded={navExpanded}
+      >
+        <span style={{ margin: "0px", width: "100%", display: "contents" }}>
+          <Navbar.Brand>
+            <Link to={"/"} onClick={setNavClose} className="navbar-brand">
+              <img src={logo} alt={logo} height="30"></img> Pritam Stocks
+            </Link>
+          </Navbar.Brand>
+          <Navbar.Collapse id="basic-navbar-nav" style={{ margin: 10 }}>
+            <Nav onClick={setNavClose}>
+              {items.map((item) =>
+                !item.hidden ? (
+                  <li
+                    className="nav-item active"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      marginRight: 10,
+                    }}
+                    key={item.key}
+                  >
+                    <div style={{ marginRight: 4 }}>{item.icon}</div>
+                    <Nav.Item key={item.key} className="nav-item active">
+                      {item.label}
+                    </Nav.Item>
+                  </li>
+                ) : null
+              )}
+            </Nav>
+          </Navbar.Collapse>
+          <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        </span>
+      </Navbar>
+      <div style={{ minHeight: minHeight - minHeight * 0.18 + "px" }}>
         <Outlet />
       </div>
       <Footer />

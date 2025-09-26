@@ -1,11 +1,13 @@
 import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./StockLevel.css";
 
 const StockLevel: React.FC = () => {
+  const navigate = useNavigate();
   useEffect(() => {
     const uid = localStorage.getItem("uid");
     if (uid === undefined || uid === null) {
-      window.location.href = "/login";
+      navigate("/login");
     }
   }, []);
 

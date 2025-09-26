@@ -1,17 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Button, Container } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import McHome from "./McHome";
 import McIndianIndices from "./McIndianIndices";
-import { Link } from "react-router-dom";
 
 const HomePage: React.FC = () => {
   const isLogined = localStorage.getItem("name") || "" ? true : false;
-  /* useEffect(() => {
-    const uid = localStorage.getItem("uid");
-    if (uid === undefined || uid === null) {
-      window.location.href = "/login";
-    }
-  }, []); */
 
   return (
     <div>
@@ -31,8 +25,6 @@ const HomePage: React.FC = () => {
               className="btn btn-primary m-3"
               onClick={() => {
                 localStorage.clear();
-                // window.location.href = "/login";
-                console.log("login");
               }}
             >
               Login

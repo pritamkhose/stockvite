@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Loading from "../components/Loading";
 import { Badge } from "react-bootstrap";
@@ -12,16 +13,17 @@ const ChartTechDetails: React.FC = (props: any) => {
   const [isLoaded, setIsLoaded] = useState(true);
   const [data, setData] = useState([]);
 
+  const navigate = useNavigate();
   useEffect(() => {
     const uid = localStorage.getItem("uid");
     if (uid === undefined || uid === null) {
-      window.location.href = "/login";
+      navigate("/login");
     } else {
       callWeb(props.match.params.id);
     }
   }, []);
 
-  const callWeb = (id) => {
+  const callWeb = (id: string) => {
     if (id !== undefined) {
       var path = "file?id=mc/techD/" + id;
       axios.get(baseURL + path).then(

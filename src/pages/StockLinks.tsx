@@ -1,236 +1,237 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import { Badge } from "react-bootstrap";
 
 const StockLinks: React.FC = () => {
   return (
     <Container>
-      <Badge variant="primary">Links</Badge>
+      <Badge bg="primary">Links</Badge>
       <ol>
         <h6>
-          <a
+          <Link
             target="_blank"
-            href="https://www.moneycontrol.com/"
+            to="https://www.moneycontrol.com/"
             rel="noreferrer"
           >
             Moneycontrol
-          </a>
+          </Link>
         </h6>
         <li>
-          <a
+          <Link
             target="_blank"
-            href="https://www.moneycontrol.com/stocks/marketstats/index.php"
+            to="https://www.moneycontrol.com/stocks/marketstats/index.php"
             rel="noreferrer"
           >
             Market Stats
-          </a>
+          </Link>
         </li>
         <li>
-          <a
+          <Link
             target="_blank"
-            href="https://www.moneycontrol.com/stocks/marketstats/fii_dii_activity/index.php"
+            to="https://www.moneycontrol.com/stocks/marketstats/fii_dii_activity/index.php"
             rel="noreferrer"
           >
             FII DII Activity
-          </a>
+          </Link>
         </li>
         <li>
-          <a
+          <Link
             target="_blank"
-            href="https://www.moneycontrol.com/markets/global-indices/"
+            to="https://www.moneycontrol.com/markets/global-indices/"
             rel="noreferrer"
           >
             Global Indices
-          </a>
+          </Link>
         </li>
         <li>
-          <a
+          <Link
             target="_blank"
-            href="https://www.moneycontrol.com/broker-research/"
+            to="https://www.moneycontrol.com/broker-research/"
             rel="noreferrer"
           >
             Broker Research
-          </a>
+          </Link>
         </li>
         <li>
-          <a
+          <Link
             target="_blank"
-            href="https://www.moneycontrol.com/stocks/marketstats/nsemact1/index.php"
+            to="https://www.moneycontrol.com/stocks/marketstats/nsemact1/index.php"
             rel="noreferrer"
           >
             Active Stocks NSE
-          </a>
+          </Link>
         </li>
         <li>
-          <a
+          <Link
             target="_blank"
-            href="https://www.moneycontrol.com/stocks/marketstats/nse_vshockers/index.php"
+            to="https://www.moneycontrol.com/stocks/marketstats/nse_vshockers/index.php"
             rel="noreferrer"
           >
             Volume shockers NSE
-          </a>
+          </Link>
         </li>
         <li>
-          <a
+          <Link
             target="_blank"
-            href="https://www.moneycontrol.com/stocks/marketinfo/marketcap/bse/index.html"
+            to="https://www.moneycontrol.com/stocks/marketinfo/marketcap/bse/index.html"
             rel="noreferrer"
           >
             Market Cap.
-          </a>
+          </Link>
         </li>
       </ol>
       <ol>
         <h6>
-          <a
+          <Link
             target="_blank"
-            href="https://pro.upstox.com/trading"
+            to="https://pro.upstox.com/trading"
             rel="noreferrer"
           >
             UpStox
-          </a>
+          </Link>
         </h6>
       </ol>
       <ol>
         <h6>
-          <a
+          <Link
             target="_blank"
-            href="https://in.tradingview.com/chart"
+            to="https://in.tradingview.com/chart"
             rel="noreferrer"
           >
             Tradingview
-          </a>
+          </Link>
         </h6>
       </ol>
       <ol>
         <h6>
-          <a
+          <Link
             target="_blank"
-            href="https://www.bseindia.com/sensex/code/16/"
+            to="https://www.bseindia.com/sensex/code/16/"
             rel="noreferrer"
           >
             BSE Sensex
-          </a>
+          </Link>
         </h6>
         <li>
-          <a
+          <Link
             target="_blank"
-            href="https://www.bseindia.com/markets/equity/EQReports/MarketWatch.html?index_code=22"
+            to="https://www.bseindia.com/markets/equity/EQReports/MarketWatch.html?index_code=22"
             rel="noreferrer"
           >
             BSE Market Watch
-          </a>
+          </Link>
         </li>
         <li>
-          <a
+          <Link
             target="_blank"
-            href="https://www.bseindia.com/corporates/corporate_act.aspx"
+            to="https://www.bseindia.com/corporates/corporate_act.aspx"
             rel="noreferrer"
           >
             BSE Corporate Action
-          </a>
+          </Link>
         </li>
         <li>
-          <a
+          <Link
             target="_blank"
-            href="https://www.bseindia.com/markets/equity/eqreports/topmarketcapitalization.aspx"
+            to="https://www.bseindia.com/markets/equity/eqreports/topmarketcapitalization.aspx"
             rel="noreferrer"
           >
             Top 100 Market capitalization
-          </a>
+          </Link>
         </li>
       </ol>
       <ol>
         <h6>
-          <a
+          <Link
             target="_blank"
-            href="https://www.nseindia.com/market-data/live-equity-market?symbol=NIFTY%2050"
+            to="https://www.nseindia.com/market-data/live-equity-market?symbol=NIFTY%2050"
             rel="noreferrer"
           >
             NSE Nifty
-          </a>
+          </Link>
         </h6>
       </ol>
       <ol>
         <h6>
-          <a
+          <Link
             target="_blank"
-            href="https://in.investing.com/indices/major-indices"
+            to="https://in.investing.com/indices/major-indices"
             rel="noreferrer"
           >
             investing.com
-          </a>
+          </Link>
         </h6>
       </ol>
       <ol>
         <h6>
-          <a
+          <Link
             target="_blank"
-            href="https://www.screener.in/explore/"
+            to="https://www.screener.in/explore/"
             rel="noreferrer"
           >
             screener.in
-          </a>
+          </Link>
         </h6>
       </ol>
       <ol>
         <h6>
-          <a
+          <Link
             target="_blank"
-            href="https://www.tickertape.in/watchlist?"
+            to="https://www.tickertape.in/watchlist?"
             rel="noreferrer"
           >
             tickertape.in
-          </a>
+          </Link>
         </h6>
       </ol>
       <ol>
         <h6>
-          <a
+          <Link
             target="_blank"
-            href="https://www.marketsmojo.com/"
+            to="https://www.marketsmojo.com/"
             rel="noreferrer"
           >
             marketsmojo.com
-          </a>
+          </Link>
         </h6>
       </ol>
       <ol>
         <h6>
-          <a
+          <Link
             target="_blank"
-            href=" https://finviz.com/screener.ashx?v=111&f=geo_india"
+            to=" https://finviz.com/screener.ashx?v=111&f=geo_india"
           >
             India - finviz.com
-          </a>
+          </Link>
         </h6>
       </ol>
       <ol>
         <h6>
-          <a href="/">IPO</a>
+          <Link to="/">IPO</Link>
         </h6>
         <li>
-          <a target="_blank" href=" https://www.ipowatch.in/">
+          <Link target="_blank" to=" https://www.ipowatch.in/">
             IPOwatch
-          </a>
+          </Link>
         </li>
         <li>
-          <a
+          <Link
             target="_blank"
-            href="https://www.chittorgarh.com/"
+            to="https://www.chittorgarh.com/"
             rel="noreferrer"
           >
             Chittorgarh.com
-          </a>
+          </Link>
         </li>
         <li>
-          <a
+          <Link
             target="_blank"
-            href="https://www.bseindia.com/publicissue.html"
+            to="https://www.bseindia.com/publicissue.html"
             rel="noreferrer"
           >
             BSE IPO
-          </a>
+          </Link>
         </li>
       </ol>
     </Container>

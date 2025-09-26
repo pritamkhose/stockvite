@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
 import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Loading from "../components/Loading";
 import LightWeightTechCharts from "./LightWeightTechCharts";
 
@@ -16,10 +17,11 @@ const MultipleTechChart: React.FC = (props: any) => {
   const [chartType] = useState("Candlestick"); // setChartType
   const [priceType] = useState(0); // setPriceType
 
+  const navigate = useNavigate();
   useEffect(() => {
     const uid = localStorage.getItem("uid");
     if (uid === undefined || uid === null) {
-      window.location.href = "/login";
+      navigate("/login");
     } else {
       callWeb(undefined);
     }
