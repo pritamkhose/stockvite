@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useLayoutEffect, useState } from "react";
 import moment from "moment";
 import {
   Chart as ChartJS,
@@ -66,15 +66,15 @@ interface DisbursementRows {
 const LoanCalculators = () => {
   const [inputFields, setInputFields] = useState({
     insvestmentPrice: 10000000,
-    downpayment: 200000,
-    loanAmount: 7000000,
+    downpayment: 2500000,
+    loanAmount: 10050000 - 2500000,
     emi: 100000,
-    emiAddon: 20000,
+    emiAddon: 0,
     rate: 7.5,
-    peroid: 15,
+    peroid: 20,
     peroidtype: "year",
-    partialLoanPer: 50,
-    startYear: moment().format("DD/MM/YYYY"),
+    partialLoanPer: 25, // Math.round(((50000 * 6 * 100) / (10000000 - 2500000))),
+    startYear: moment("01/01/2026").format("DD/MM/YYYY"),
   });
 
   const [disbursementRows, setDisbursementRows] = useState<DisbursementRows[]>([
@@ -148,8 +148,7 @@ const LoanCalculators = () => {
         .format("MMM YYYY");
       if (i === 0) {
         const pricipalAmount: number =
-          (inputFields.insvestmentPrice - inputFields.downpayment) *
-          (inputFields.partialLoanPer * 0.01);
+          (inputFields.loanAmount * inputFields.partialLoanPer) / 100;
         const emiAmount = (pricipalAmount * inputFields.rate) / (12 * 100);
         const pricipalMonth =
           inputFields.emi - emiAmount + inputFields.emiAddon;
@@ -160,7 +159,7 @@ const LoanCalculators = () => {
           emiAmount,
           emiAddon: inputFields.emiAddon,
           pricipalMonth,
-          pricipalAmount,
+          pricipalAmount: pricipalAmount.toFixed(0) as unknown as number,
           balanceAmount: balanceAmount.toFixed(0) as unknown as number,
           disbursementAmount: 0,
           dateIndex,
@@ -243,13 +242,63 @@ const LoanCalculators = () => {
   useEffect(() => {
     const a = localStorage.getItem("LoanCalculators");
     if (a) {
-      const parsedData = JSON.parse(a);
-      console.log("Parsed data:", parsedData);
-      setInputFields(parsedData.inputFields);
-      setDisbursementRows(parsedData.disbursementRows);
+      setTimeout(() => {
+        const parsedData = JSON.parse(a);
+        console.log("Parsed data:", parsedData);
+        setInputFields(parsedData.inputFields);
+        setDisbursementRows(parsedData.disbursementRows);
+        calcTotal();
+      }, 500);
     }
-    calcTotal();
   }, []);
+
+  const disbursementRow = (index: number, acc: DisbursementRows) => {
+    let amount = acc.oneTimeAmount > 0 ? acc.oneTimeAmount : 0;
+    amount = acc.disbursementAmount > 0 ? acc.disbursementAmount : amount;
+    const date = moment(inputFields.startYear, "DD/MM/YYYY")
+      .add(acc.monthIndex, "months")
+      .format("YYYY-MM-DD");
+    return (
+      <div key={index} className="row mb-2">
+        <div className="col-md-6">
+          <input
+            type="date"
+            className="form-control"
+            value={date}
+            onChange={(e) => {
+              setDisbursementRows([
+                ...disbursementRows.slice(0, index),
+                { ...disbursementRows[index], date: e.target.value },
+                ...disbursementRows.slice(index + 1),
+              ]);
+              calcTotal();
+            }}
+          />
+        </div>
+        <div className="col-md-6">
+          <div className="input-group">
+            <span className="input-group-text">₹</span>
+            <input
+              type="number"
+              className="form-control"
+              value={amount || ""}
+              onChange={(e) => {
+                setDisbursementRows([
+                  ...disbursementRows.slice(0, index),
+                  {
+                    ...disbursementRows[index],
+                    oneTimeAmount: Number(e.target.value),
+                  },
+                  ...disbursementRows.slice(index + 1),
+                ]);
+                calcTotal();
+              }}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div>
@@ -299,7 +348,7 @@ const LoanCalculators = () => {
                     type="number"
                     className="form-control"
                     placeholder="6.0"
-                    step="0.1"
+                    step="0.05"
                     min="1"
                     max="15"
                     value={inputFields.rate}
@@ -317,7 +366,7 @@ const LoanCalculators = () => {
                   className="form-range mt-2"
                   min="1"
                   max="15"
-                  step="0.1"
+                  step="0.05"
                   value={inputFields.rate}
                   onChange={(e) => {
                     setInputFields({
@@ -372,7 +421,14 @@ const LoanCalculators = () => {
           <div className="col-md-3">
             <div className="card p-3">
               <div className="mb-0">
-                <label className="form-label">Down Payment</label>
+                <label className="form-label">
+                  Down Payment (
+                  {(
+                    (inputFields.downpayment * 100) /
+                    inputFields.insvestmentPrice
+                  ).toFixed(2)}
+                  %)
+                </label>
                 <div className="input-group">
                   <span className="input-group-text">₹</span>
                   <input
@@ -441,8 +497,10 @@ const LoanCalculators = () => {
                   }}
                 />
               </div>
-              <div className="mb-0">
-                <label className="form-label">Monthly EMI Addon</label>
+              <div className="mb-2">
+                <label className="form-label">
+                  Monthly EMI Addon ({inputFields.emiAddon + inputFields.emi} ₹)
+                </label>
                 <div className="input-group">
                   <span className="input-group-text">₹</span>
                   <input
@@ -481,24 +539,7 @@ const LoanCalculators = () => {
           </div>
           <div className="col-md-3">
             <div className="card p-3">
-              <div className="mb-0">
-                <label className="form-label">Loan Amount</label>
-                <div className="input-group">
-                  <span className="input-group-text">₹</span>
-                  <input
-                    disabled
-                    type="number"
-                    className="form-control"
-                    value={(
-                      (inputFields.loanAmount * inputFields.partialLoanPer) /
-                      100
-                    ).toFixed(0)}
-                  />
-                </div>
-                <br />
-              </div>
-
-              <div className="mb-0">
+              <div className="mb-2">
                 <label className="form-label">Start Time</label>
                 <div className="input-group">
                   <input
@@ -517,57 +558,72 @@ const LoanCalculators = () => {
                     }}
                   />
                 </div>
+              </div>
+              <div className="mb-0">
+                <label className="form-label">Partial Loan Disbursement</label>
+                <div className="input-group">
+                  <span className="input-group-text">%</span>
+                  <input
+                    type="number"
+                    className="form-control"
+                    placeholder="6.0"
+                    min="0"
+                    max="100"
+                    step="1"
+                    value={inputFields.partialLoanPer}
+                    onChange={(e) => {
+                      setInputFields({
+                        ...inputFields,
+                        partialLoanPer: Number(e.target.value),
+                      });
+                      calcTotal();
+                    }}
+                  />
+                </div>
                 <input
                   type="range"
                   className="form-range mt-2"
-                  step="5000"
-                  min="000"
-                  max="500000"
-                  value={inputFields.emi}
+                  min="0"
+                  max="100"
+                  step="1"
+                  value={inputFields.partialLoanPer}
                   onChange={(e) => {
                     setInputFields({
                       ...inputFields,
-                      emi: Number(e.target.value),
+                      partialLoanPer: Number(e.target.value),
                     });
                     calcTotal();
                   }}
                 />
               </div>
+
+              <div className="mb-2">
+                <label className="form-label">Start Loan Amount</label>
+                <div className="input-group">
+                  <span className="input-group-text">₹</span>
+                  <input
+                    disabled
+                    type="number"
+                    className="form-control"
+                    value={(
+                      (inputFields.loanAmount * inputFields.partialLoanPer) /
+                      100
+                    ).toFixed(0)}
+                  />
+                </div>
+              </div>
+
               <div className="mb-0">
-                <label className="form-label">
-                  Partial Loan Disbursement %
-                </label>
-                <input
-                  type="number"
-                  className="form-control"
-                  placeholder="6.0"
-                  min="0"
-                  max="100"
-                  step="1"
-                  value={inputFields.partialLoanPer}
-                  onChange={(e) => {
-                    setInputFields({
-                      ...inputFields,
-                      partialLoanPer: Number(e.target.value),
-                    });
-                    calcTotal();
-                  }}
-                />
-                <input
-                  type="range"
-                  className="form-range mt-2"
-                  min="0"
-                  max="100"
-                  step="1"
-                  value={inputFields.partialLoanPer}
-                  onChange={(e) => {
-                    setInputFields({
-                      ...inputFields,
-                      partialLoanPer: Number(e.target.value),
-                    });
-                    calcTotal();
-                  }}
-                />
+                <label className="form-label">Total Loan Amount</label>
+                <div className="input-group">
+                  <span className="input-group-text">₹</span>
+                  <input
+                    disabled
+                    type="number"
+                    className="form-control"
+                    value={inputFields.loanAmount}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -608,6 +664,16 @@ const LoanCalculators = () => {
                     .reduce((acc, row) => acc + row.disbursementAmount, 0)
                     .toLocaleString()}
                 </strong>
+                (
+                {(
+                  (disbursementRows.reduce(
+                    (acc, row) => acc + row.disbursementAmount,
+                    0
+                  ) *
+                    100) /
+                  inputFields.loanAmount
+                ).toFixed(2)}
+                %)
               </p>
               <p className="mb-2">
                 <small>One Time Amount ₹</small>
@@ -617,6 +683,16 @@ const LoanCalculators = () => {
                     .reduce((acc, row) => acc + row.oneTimeAmount, 0)
                     .toLocaleString()}
                 </strong>
+                (
+                {(
+                  (disbursementRows.reduce(
+                    (acc, row) => acc + row.oneTimeAmount,
+                    0
+                  ) *
+                    100) /
+                  inputFields.insvestmentPrice
+                ).toFixed(2)}
+                %)
               </p>
               <button
                 hidden={true}
@@ -727,6 +803,41 @@ const LoanCalculators = () => {
                 </div>
               </div>
             ))}
+          </div>
+          <div className="row mb-3">
+            <div className="col-md-6">
+              <div className="card p-3">
+                <div className="mb-2">
+                  <b>Disbursement</b>
+                  <br />
+                  <ol>
+                    {disbursementRows.map(
+                      (acc, index) =>
+                        acc.disbursementAmount > 0 && (
+                          <li key={index}>{disbursementRow(index, acc)}</li>
+                          // <li>{acc.disbursementAmount.toLocaleString()}</li>
+                        )
+                    )}
+                  </ol>
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6">
+              <div className="card p-3">
+                <div className="mb-2">
+                  <b>One Time Amount</b>
+                  <br />
+                  <ol>
+                    {disbursementRows.map(
+                      (acc, index) =>
+                        acc.oneTimeAmount > 0 && (
+                          <li key={index}>{disbursementRow(index, acc)}</li>
+                        )
+                    )}
+                  </ol>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
