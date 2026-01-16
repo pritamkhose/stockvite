@@ -5,6 +5,7 @@ import {
   CategoryScale,
   LinearScale,
   BarElement,
+  LineController,
   LineElement,
   PointElement,
   Title,
@@ -15,6 +16,7 @@ import { Chart } from "react-chartjs-2";
 
 ChartJS.register(
   CategoryScale,
+  LineController,
   LinearScale,
   BarElement,
   LineElement,
@@ -341,47 +343,55 @@ const LoanCalculators = () => {
   };
 
   const renderDisbursementUI = () => {
-    return (uishow.disbursement || uishow.onetime) && (
-      <div className="row mb-3">
-        <br />
-        <br />
-        <div className="col-md-6">
-          <div className="card p-3">
-            <div className="mb-2">
-              <b>Disbursement : {disbursementRows
+    return (
+      (uishow.disbursement || uishow.onetime) && (
+        <div className="row mb-3">
+          <br />
+          <br />
+          <div className="col-md-6">
+            <div className="card p-3">
+              <div className="mb-2">
+                <b>
+                  Disbursement :{" "}
+                  {disbursementRows
                     .reduce((acc, row) => acc + row.disbursementAmount, 0)
-                    .toLocaleString()}</b>
-              <br />
-              <ol>
-                {disbursementRows.map(
-                  (acc, index) =>
-                    acc.disbursementAmount > 0 && (
-                      <li key={index}>{disbursementRow(index, acc)}</li>
-                    )
-                )}
-              </ol>
+                    .toLocaleString()}
+                </b>
+                <br />
+                <ol>
+                  {disbursementRows.map(
+                    (acc, index) =>
+                      acc.disbursementAmount > 0 && (
+                        <li key={index}>{disbursementRow(index, acc)}</li>
+                      )
+                  )}
+                </ol>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="col-md-6">
-          <div className="card p-3">
-            <div className="mb-2">
-              <b>One Time Amount : {disbursementRows
+          <div className="col-md-6">
+            <div className="card p-3">
+              <div className="mb-2">
+                <b>
+                  One Time Amount :{" "}
+                  {disbursementRows
                     .reduce((acc, row) => acc + row.oneTimeAmount, 0)
-                    .toLocaleString()}</b>
-              <br />
-              <ol>
-                {disbursementRows.map(
-                  (acc, index) =>
-                    acc.oneTimeAmount > 0 && (
-                      <li key={index}>{disbursementRow(index, acc)}</li>
-                    )
-                )}
-              </ol>
+                    .toLocaleString()}
+                </b>
+                <br />
+                <ol>
+                  {disbursementRows.map(
+                    (acc, index) =>
+                      acc.oneTimeAmount > 0 && (
+                        <li key={index}>{disbursementRow(index, acc)}</li>
+                      )
+                  )}
+                </ol>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )
     );
   };
 
