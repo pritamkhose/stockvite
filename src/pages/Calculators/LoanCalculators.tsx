@@ -66,15 +66,15 @@ interface DisbursementRows {
 const LoanCalculators = () => {
   const [inputFields, setInputFields] = useState({
     insvestmentPrice: 10000000,
-    downpayment: 2500000,
+    downpayment: 2000000,
     loanAmount: 10050000 - 2500000,
-    emi: 100000,
-    emiAddon: 0,
+    emi: 60822,
+    emiAddon: 20000,
     rate: 7.5,
     peroid: 20,
     peroidtype: "year",
-    partialLoanPer: 25, // Math.round(((50000 * 6 * 100) / (10000000 - 2500000))),
-    startYear: moment("01/01/2026").format("DD/MM/YYYY"),
+    partialLoanPer: 34,
+    startYear: moment().format("DD/MM/YYYY"),
   });
 
   const [disbursementRows, setDisbursementRows] = useState<DisbursementRows[]>([
@@ -96,17 +96,27 @@ const LoanCalculators = () => {
     {
       monthIndex: 10,
       disbursementAmount: 0,
-      oneTimeAmount: 120000,
+      oneTimeAmount: 500000,
     },
     {
       monthIndex: 12,
+      disbursementAmount: 500000,
+      oneTimeAmount: 0,
+    },
+    {
+      monthIndex: 15,
       disbursementAmount: 1000000,
       oneTimeAmount: 0,
     },
     {
-      monthIndex: 16,
+      monthIndex: 18,
       disbursementAmount: 1000000,
       oneTimeAmount: 0,
+    },
+    {
+      monthIndex: 21,
+      disbursementAmount: 0,
+      oneTimeAmount: 700000,
     },
   ]);
 
@@ -131,7 +141,37 @@ const LoanCalculators = () => {
     },
   ]);
 
-  const calcTotal = () => {
+  const [uishow, setUiShow] = useState({
+    disbursement: true,
+    onetime: true,
+  });
+
+  const calcTotal = (key?: string) => {
+    if (
+      (key &&
+        [
+          "insvestmentPrice",
+          "downpayment",
+          "rate",
+          "peroid",
+          "downpayment",
+        ].includes(key)) ||
+      !key
+    ) {
+      // Calculate the EMI
+      const monthlyRate = inputFields.rate / (12 * 100);
+      const numerator =
+        inputFields.loanAmount *
+        monthlyRate *
+        Math.pow(1 + monthlyRate, inputFields.peroid * 12);
+      const denominator =
+        Math.pow(1 + monthlyRate, inputFields.peroid * 12) - 1;
+      const emi = (numerator / denominator).toFixed(0) as unknown as number;
+      setInputFields((prevState) => ({
+        ...prevState,
+        emi,
+      }));
+    }
     const emiRowsTemp = [];
     for (let i = 0; i < inputFields.peroid * 12; i++) {
       let disbursementAmount = 0;
@@ -271,7 +311,7 @@ const LoanCalculators = () => {
                 { ...disbursementRows[index], date: e.target.value },
                 ...disbursementRows.slice(index + 1),
               ]);
-              calcTotal();
+              calcTotal("date");
             }}
           />
         </div>
@@ -291,9 +331,54 @@ const LoanCalculators = () => {
                   },
                   ...disbursementRows.slice(index + 1),
                 ]);
-                calcTotal();
+                calcTotal("oneTimeAmount");
               }}
             />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderDisbursementUI = () => {
+    return (uishow.disbursement || uishow.onetime) && (
+      <div className="row mb-3">
+        <br />
+        <br />
+        <div className="col-md-6">
+          <div className="card p-3">
+            <div className="mb-2">
+              <b>Disbursement : {disbursementRows
+                    .reduce((acc, row) => acc + row.disbursementAmount, 0)
+                    .toLocaleString()}</b>
+              <br />
+              <ol>
+                {disbursementRows.map(
+                  (acc, index) =>
+                    acc.disbursementAmount > 0 && (
+                      <li key={index}>{disbursementRow(index, acc)}</li>
+                    )
+                )}
+              </ol>
+            </div>
+          </div>
+        </div>
+        <div className="col-md-6">
+          <div className="card p-3">
+            <div className="mb-2">
+              <b>One Time Amount : {disbursementRows
+                    .reduce((acc, row) => acc + row.oneTimeAmount, 0)
+                    .toLocaleString()}</b>
+              <br />
+              <ol>
+                {disbursementRows.map(
+                  (acc, index) =>
+                    acc.oneTimeAmount > 0 && (
+                      <li key={index}>{disbursementRow(index, acc)}</li>
+                    )
+                )}
+              </ol>
+            </div>
           </div>
         </div>
       </div>
@@ -319,7 +404,7 @@ const LoanCalculators = () => {
                         ...inputFields,
                         insvestmentPrice: Number(e.target.value),
                       });
-                      calcTotal();
+                      calcTotal("insvestmentPrice");
                     }}
                   />
                 </div>
@@ -335,7 +420,7 @@ const LoanCalculators = () => {
                       ...inputFields,
                       insvestmentPrice: Number(e.target.value),
                     });
-                    calcTotal();
+                    calcTotal("insvestmentPrice");
                   }}
                 />
               </div>
@@ -357,7 +442,7 @@ const LoanCalculators = () => {
                         ...inputFields,
                         rate: Number(e.target.value),
                       });
-                      calcTotal();
+                      calcTotal("rate");
                     }}
                   />
                 </div>
@@ -373,7 +458,7 @@ const LoanCalculators = () => {
                       ...inputFields,
                       rate: Number(e.target.value),
                     });
-                    calcTotal();
+                    calcTotal("rate");
                   }}
                 />
               </div>
@@ -385,7 +470,7 @@ const LoanCalculators = () => {
                 <select
                   className="form-select"
                   onChange={(e) => {
-                    calcTotal();
+                    calcTotal("peroid");
                     setInputFields({
                       ...inputFields,
                       peroidtype: e.target.value,
@@ -412,7 +497,7 @@ const LoanCalculators = () => {
                       ...inputFields,
                       peroid: Number(e.target.value),
                     });
-                    calcTotal();
+                    calcTotal("peroid");
                   }}
                 />
               </div>
@@ -440,7 +525,7 @@ const LoanCalculators = () => {
                         ...inputFields,
                         downpayment: Number(e.target.value),
                       });
-                      calcTotal();
+                      calcTotal("downpayment");
                     }}
                   />
                 </div>
@@ -456,7 +541,7 @@ const LoanCalculators = () => {
                       ...inputFields,
                       downpayment: Number(e.target.value),
                     });
-                    calcTotal();
+                    calcTotal("downpayment");
                   }}
                 />
               </div>
@@ -477,7 +562,7 @@ const LoanCalculators = () => {
                         ...inputFields,
                         emi: Number(e.target.value),
                       });
-                      calcTotal();
+                      calcTotal("emi");
                     }}
                   />
                 </div>
@@ -493,13 +578,14 @@ const LoanCalculators = () => {
                       ...inputFields,
                       emi: Number(e.target.value),
                     });
-                    calcTotal();
+                    calcTotal("emi");
                   }}
                 />
               </div>
               <div className="mb-2">
                 <label className="form-label">
-                  Monthly EMI Addon ({inputFields.emiAddon + inputFields.emi} ₹)
+                  Monthly EMI Addon (
+                  {Number(inputFields.emiAddon) + Number(inputFields.emi)} ₹)
                 </label>
                 <div className="input-group">
                   <span className="input-group-text">₹</span>
@@ -515,7 +601,7 @@ const LoanCalculators = () => {
                         ...inputFields,
                         emiAddon: Number(e.target.value),
                       });
-                      calcTotal();
+                      calcTotal("emiAddon");
                     }}
                   />
                 </div>
@@ -531,7 +617,7 @@ const LoanCalculators = () => {
                       ...inputFields,
                       emiAddon: Number(e.target.value),
                     });
-                    calcTotal();
+                    calcTotal("emiAddon");
                   }}
                 />
               </div>
@@ -554,7 +640,7 @@ const LoanCalculators = () => {
                         ...inputFields,
                         startYear: moment(e.target.value).format("DD/MM/YYYY"),
                       });
-                      calcTotal();
+                      calcTotal("startYear");
                     }}
                   />
                 </div>
@@ -576,7 +662,7 @@ const LoanCalculators = () => {
                         ...inputFields,
                         partialLoanPer: Number(e.target.value),
                       });
-                      calcTotal();
+                      calcTotal("partialLoanPer");
                     }}
                   />
                 </div>
@@ -592,7 +678,7 @@ const LoanCalculators = () => {
                       ...inputFields,
                       partialLoanPer: Number(e.target.value),
                     });
-                    calcTotal();
+                    calcTotal("partialLoanPer");
                   }}
                 />
               </div>
@@ -656,7 +742,13 @@ const LoanCalculators = () => {
                 )}
                 %)
               </p>
-              <p className="mb-2">
+              <p
+                className="mb-2"
+                onClick={() => {
+                  setUiShow({ ...uishow, disbursement: !uishow.disbursement });
+                }}
+                style={{ cursor: "pointer" }}
+              >
                 <small>Disbursement ₹</small>
                 <br />
                 <strong>
@@ -675,7 +767,13 @@ const LoanCalculators = () => {
                 ).toFixed(2)}
                 %)
               </p>
-              <p className="mb-2">
+              <p
+                className="mb-2"
+                onClick={() => {
+                  setUiShow({ ...uishow, onetime: !uishow.onetime });
+                }}
+                style={{ cursor: "pointer" }}
+              >
                 <small>One Time Amount ₹</small>
                 <br />
                 <strong>
@@ -695,9 +793,8 @@ const LoanCalculators = () => {
                 %)
               </p>
               <button
-                hidden={true}
-                className="mb-2 btn btn-success"
-                style={{ padding: "inherit", marginLeft: "12px" }}
+                className="btn btn-success"
+                style={{ marginTop: "2px" }}
                 type="button"
                 onClick={() => calcTotal()}
               >
@@ -705,6 +802,8 @@ const LoanCalculators = () => {
               </button>
             </div>
           </div>
+          <br />
+          {renderDisbursementUI()}
           <br />
           <Chart type="bar" data={data} options={options} />
           <br />
@@ -768,7 +867,7 @@ const LoanCalculators = () => {
                       <b>EMI ₹</b>
                     </label>
                   ) : null}
-                  <p>{inputFields.emi + inputFields.emiAddon}</p>
+                  <p>{Number(inputFields.emi) + inputFields.emiAddon}</p>
                 </div>
                 <div className="form-group col-sm-1">
                   {index % 12 === 0 ? (
@@ -803,41 +902,6 @@ const LoanCalculators = () => {
                 </div>
               </div>
             ))}
-          </div>
-          <div className="row mb-3">
-            <div className="col-md-6">
-              <div className="card p-3">
-                <div className="mb-2">
-                  <b>Disbursement</b>
-                  <br />
-                  <ol>
-                    {disbursementRows.map(
-                      (acc, index) =>
-                        acc.disbursementAmount > 0 && (
-                          <li key={index}>{disbursementRow(index, acc)}</li>
-                          // <li>{acc.disbursementAmount.toLocaleString()}</li>
-                        )
-                    )}
-                  </ol>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="card p-3">
-                <div className="mb-2">
-                  <b>One Time Amount</b>
-                  <br />
-                  <ol>
-                    {disbursementRows.map(
-                      (acc, index) =>
-                        acc.oneTimeAmount > 0 && (
-                          <li key={index}>{disbursementRow(index, acc)}</li>
-                        )
-                    )}
-                  </ol>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
