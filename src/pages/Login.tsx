@@ -16,9 +16,12 @@ import FacebookLogin from "react-facebook-login";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
 import GitHubLogin from "react-github-login";
 
-const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-const FACEBOOK_CLIENT_ID = import.meta.env.VITE_FACEBOOK_CLIENT_ID;
-const GITHUB_CLIENT_ID = import.meta.env.VITE_GITHUB_CLIENT_ID;
+const GOOGLE_CLIENT_ID =
+  import.meta.env.VITE_APP_GOOGLE_CLIENT_ID;
+const FACEBOOK_CLIENT_ID =
+  import.meta.env.VITE_APP_FACEBOOK_CLIENT_ID;
+const GITHUB_CLIENT_ID =
+  import.meta.env.VITE_APP_GITHUB_CLIENT_ID;
 let APP_AUTH_LOGIN = import.meta.env.VITE_APP_AUTH_LOGIN;
 APP_AUTH_LOGIN = {
   google: false,
@@ -26,14 +29,16 @@ APP_AUTH_LOGIN = {
   github: true,
   email: true,
 };
-const baseURL =
-  import.meta.env.VITE_APP_API_URL !== undefined
-    ? import.meta.env.VITE_APP_API_URL
-    : "";
+const baseURL = import.meta.env.VITE_APP_API_URL ?? "";
 console.log("Env:", {
   env: import.meta.env.DEV ? import.meta.env : null,
   baseURL,
-  APP_AUTH_LOGIN,
+  config: {
+    APP_AUTH_LOGIN,
+    GITHUB_CLIENT_ID,
+    FACEBOOK_CLIENT_ID,
+    GOOGLE_CLIENT_ID,
+  },
 });
 
 import { DataType, APIResponseType, APIError } from "./Login.model";
@@ -123,7 +128,7 @@ const Login = () => {
     });
     // props.updateLogin();
     // props.history.push('/');
-     window.dispatchEvent(new Event("storage"));
+    window.dispatchEvent(new Event("storage"));
   };
 
   const handleLoginFailure = () => {
@@ -185,13 +190,19 @@ const Login = () => {
     }
   };
 
-  const handleLoginPopup = (data: DataType) => {
+  const handleLoginPopup = (data?: DataType | React.MouseEvent) => {
     setState({
       ...state,
       show: !state.show,
     });
-    if (data.uid !== null && data.uid !== undefined) {
-      saveData(data);
+    if (
+      data &&
+      typeof data === "object" &&
+      "uid" in data &&
+      data.uid !== null &&
+      data.uid !== undefined
+    ) {
+      saveData(data as DataType);
     }
   };
 
@@ -246,7 +257,7 @@ const Login = () => {
             <td>User ID</td>
             <td>{localStorage.getItem("uid")}</td>
           </tr>
-           <tr>
+          <tr>
             <td>Device</td>
             <td>{window.navigator.userAgent}</td>
           </tr>
@@ -297,7 +308,7 @@ const Login = () => {
               <br />
               <br />
               <br />
-              {/* {APP_AUTH_LOGIN.google ? (
+              {APP_AUTH_LOGIN.google ? (
                 <GoogleLogin
                   clientId={GOOGLE_CLIENT_ID}
                   buttonText="Sign in with Google"
@@ -306,7 +317,7 @@ const Login = () => {
                   cookiePolicy={"single_host_origin"}
                   responseType="code,token"
                 />
-              ) : null} */}
+              ) : null}
               <br />
               <br />
               <br />
